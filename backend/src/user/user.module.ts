@@ -7,6 +7,8 @@ import { PrismaService } from 'src/database/prisma.service';
 import { UserRepository } from 'src/repositories/userRepository';
 import { PrismaUserRepository } from 'src/repositories/prisma/prismaUserRepository';
 import { jwtConstants } from 'src/constants/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { UserGuard } from './user.guard';
 
 @Module({
   imports: [
@@ -23,6 +25,10 @@ import { jwtConstants } from 'src/constants/jwt';
     {
       provide: UserRepository,
       useClass: PrismaUserRepository,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: UserGuard,
     },
   ],
   exports: [UserService],
