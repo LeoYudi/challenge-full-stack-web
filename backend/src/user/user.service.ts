@@ -1,26 +1,60 @@
-import { Injectable } from '@nestjs/common';
 import {
-  CreateUserArgsType,
-  UserRepository,
-} from 'src/repositories/userRepository';
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+
+import { UserRepository } from 'src/repositories/userRepository';
+
+import { Bcrypt } from 'src/utils/bcrypt';
 
 @Injectable()
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userRepository: UserRepository,
+    private jwtService: JwtService,
+  ) {}
 
-  async findOne(id: string) {
-    return await this.userRepository.findOne(id);
+  async signUp(login: string, password: string) {
+    const userExists = await this.userRepository.findByLogin(login);
+
+    if (userExists) throw new BadRequestException('Login already exists');
+
+    const newUser = await this.userRepository.create({
+      login,
+      password: await Bcrypt.hash(password),
+    });
+
+    if (!newUser)
+      throw new InternalServerErrorException('Internal server error');
+
+    return {
+      user: {
+        id: newUser.id,
+        login: newUser.login,
+      },
+    };
   }
 
-  async findByLogin(login: string) {
-    return await this.userRepository.findByLogin(login);
-  }
+  async signIn(login: string, password: string) {
+    const user = await this.userRepository.findByLogin(login);
 
-  async create(user: CreateUserArgsType) {
-    return await this.userRepository.create(user);
-  }
+    if (!user) throw new BadRequestException('Login or password are invalid');
 
-  async delete(id: string) {
-    return await this.userRepository.delete(id);
+    if (!(await Bcrypt.compare(password, user.password)))
+      throw new BadRequestException('Login or password are invalid');
+
+    const payload = {
+      user: {
+        id: user.id,
+        login: user.login,
+      },
+    };
+
+    return {
+      ...payload,
+      token: await this.jwtService.signAsync(payload),
+    };
   }
 }
