@@ -31,6 +31,5 @@ import { UserGuard } from './user.guard';
       useClass: UserGuard,
     },
   ],
-  exports: [UserService],
 })
 export class UserModule {}
