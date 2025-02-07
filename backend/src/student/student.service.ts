@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { StudentRepository } from 'src/repositories/studentRepository';
 
@@ -26,6 +27,21 @@ export class StudentService {
 
     return {
       student: newStudent,
+    };
+  }
+
+  async delete(id: string) {
+    const student = await this.studentRepository.findOne(id);
+
+    if (!student) throw new NotFoundException('Student not found');
+
+    const result = await this.studentRepository.delete(id);
+
+    if (!result)
+      throw new InternalServerErrorException('Internal server error');
+
+    return {
+      student: result,
     };
   }
 }
