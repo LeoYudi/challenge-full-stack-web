@@ -4,10 +4,12 @@ import {
   Controller,
   Delete,
   Param,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { CreateStudentBody } from 'src/dtos/createStudentBody';
+import { UpdateStudentBody } from 'src/dtos/updateStudentBody';
 
 @Controller('student')
 export class StudentController {
@@ -23,5 +25,12 @@ export class StudentController {
   async delete(@Param('id') id?: string) {
     if (!id) throw new BadRequestException('Param `id` should not be empty');
     return await this.studentService.delete(id);
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id?: string, @Body() body?: UpdateStudentBody) {
+    if (!id) throw new BadRequestException('Param `id` should not be empty');
+
+    return await this.studentService.update(id, body?.name, body?.email);
   }
 }

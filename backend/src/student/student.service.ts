@@ -44,4 +44,22 @@ export class StudentService {
       student: result,
     };
   }
+
+  async update(id: string, name?: string, email?: string) {
+    const student = await this.studentRepository.findOne(id);
+
+    if (!student) throw new NotFoundException('Student not found');
+
+    const updatedStudent = await this.studentRepository.update(id, {
+      name: name ? name : student.name,
+      email: email ? email : student.email,
+    });
+
+    if (!updatedStudent)
+      throw new InternalServerErrorException('Internal server error');
+
+    return {
+      student: updatedStudent,
+    };
+  }
 }
