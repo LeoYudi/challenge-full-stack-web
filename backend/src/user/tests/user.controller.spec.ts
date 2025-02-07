@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
+import { UserController } from '../user.controller';
+import { UserService } from '../user.service';
 import { CreateUserBody } from 'src/dtos/createUserBody';
 import { LoginBody } from 'src/dtos/loginBody';
 

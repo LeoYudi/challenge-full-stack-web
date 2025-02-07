@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserService } from './user.service';
+import { UserService } from '../user.service';
 import { UserRepository } from 'src/repositories/userRepository';
 import { JwtService } from '@nestjs/jwt';
 import { Bcrypt } from 'src/utils/bcrypt';

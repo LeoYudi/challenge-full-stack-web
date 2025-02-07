@@ -1,4 +1,4 @@
-import { UserGuard } from './user.guard';
+import { UserGuard } from '../user.guard';
 import { JwtService } from '@nestjs/jwt';
 import { Reflector } from '@nestjs/core';
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
