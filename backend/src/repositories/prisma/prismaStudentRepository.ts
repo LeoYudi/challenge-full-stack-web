@@ -26,8 +26,8 @@ export class PrismaStudentRepository implements StudentRepository {
   async list(
     skip: number,
     take: number,
+    sortOrder: 'asc' | 'desc' = 'asc',
     orderBy?: string,
-    sortOrder?: string,
   ): Promise<ResultStudentType[]> {
     const order = {};
     if (orderBy) order[orderBy] = sortOrder;

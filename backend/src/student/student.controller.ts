@@ -3,13 +3,16 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { CreateStudentBody } from 'src/dtos/createStudentBody';
 import { UpdateStudentBody } from 'src/dtos/updateStudentBody';
+import { ListStudentParams } from 'src/dtos/listStudentParams';
 
 @Controller('student')
 export class StudentController {
@@ -28,9 +31,15 @@ export class StudentController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id?: string, @Body() body?: UpdateStudentBody) {
+  async update(@Param('id') id: string, @Body() body: UpdateStudentBody) {
     if (!id) throw new BadRequestException('Param `id` should not be empty');
 
     return await this.studentService.update(id, body?.name, body?.email);
+  }
+
+  @Get()
+  async list(@Query() queryParams: ListStudentParams) {
+    const { page, perPage, sortOrder, orderBy } = queryParams;
+    return await this.studentService.list(+page, +perPage, sortOrder, orderBy);
   }
 }

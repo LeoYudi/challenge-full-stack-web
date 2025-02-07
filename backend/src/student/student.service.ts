@@ -62,4 +62,20 @@ export class StudentService {
       student: updatedStudent,
     };
   }
+
+  async list(
+    page: number,
+    perPage: number,
+    sortOrder?: 'asc' | 'desc',
+    orderBy?: string,
+  ) {
+    const students = await this.studentRepository.list(
+      (page - 1) * perPage,
+      perPage,
+      sortOrder,
+      orderBy,
+    );
+
+    return { students };
+  }
 }

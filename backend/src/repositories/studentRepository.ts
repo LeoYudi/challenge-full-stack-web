@@ -26,8 +26,8 @@ export abstract class StudentRepository {
   abstract list(
     skip: number,
     take: number,
+    sortOrder?: 'asc' | 'desc',
     orderBy?: string,
-    sortOrder?: string,
   ): Promise<ResultStudentType[]>;
 
   abstract create(
