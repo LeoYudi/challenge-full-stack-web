@@ -12,12 +12,9 @@ describe('UserService', () => {
   let userService: UserService;
 
   const mockUserRepository = {
-    findOne: jest.fn(),
     findByLogin: jest.fn(),
     create: jest.fn(),
-    delete: jest.fn(),
-    update: jest.fn(),
-  } as jest.Mocked<UserRepository>;
+  };
 
   const mockJwtService = jest.createMockFromModule<JwtService>('@nestjs/jwt');
 
