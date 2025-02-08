@@ -28,5 +28,8 @@ export class ListStudentParams {
   })
   sortOrder?: 'asc' | 'desc';
 
+  @IsIn(['name', 'email', 'cpf', 'ra', undefined], {
+    message: 'Query param `orderBy` should be one field from Student',
+  })
   orderBy?: string;
 }
