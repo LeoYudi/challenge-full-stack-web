@@ -34,7 +34,7 @@
         </v-row>
 
         <div class="d-flex justify-end ga-5">
-          <v-btn @click="handleCancel" color="error">Cancelar</v-btn>
+          <v-btn color="error" @click="handleCancel">Cancelar</v-btn>
           <v-btn type="submit" color="success">Salvar</v-btn>
         </div>
       </v-form>
