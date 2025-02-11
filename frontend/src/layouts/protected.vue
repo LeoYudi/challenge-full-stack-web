@@ -26,9 +26,7 @@
       <v-list-item link title="Usuários" />
     </v-navigation-drawer>
 
-    <div class="pa-3">
-      <router-view />
-    </div>
+    <router-view />
   </v-main>
 </template>
 

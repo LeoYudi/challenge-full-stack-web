@@ -1,6 +1,8 @@
 <template>
+  <PageTitle title="Consulta de Alunos" />
+
   <div class="d-flex mb-5">
-    <v-btn>Cadastrar Aluno</v-btn>
+    <v-btn @click="handleCreate">Cadastrar Aluno</v-btn>
   </div>
 
   <div>
@@ -39,4 +41,8 @@ watchEffect(async () => {
     snackbarStore.alertMessage("Algo deu errado, tente de novo mais tarde");
   }
 });
+
+const handleCreate = () => {
+  router.push("/students/create");
+};
 </script>
