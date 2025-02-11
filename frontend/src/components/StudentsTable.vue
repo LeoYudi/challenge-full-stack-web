@@ -6,6 +6,7 @@
         <th class="text-left">Email</th>
         <th class="text-left">RA</th>
         <th class="text-left">CPF</th>
+        <th class="text-left">Ações</th>
       </tr>
     </thead>
     <tbody>
@@ -14,6 +15,19 @@
         <td>{{ student.email }}</td>
         <td>{{ student.ra }}</td>
         <td>{{ student.cpf }}</td>
+        <td>
+          <v-btn
+            variant="text"
+            size="small"
+            color="error"
+            icon="mdi-delete"
+            @click="
+              () => {
+                onDelete(student.id);
+              }
+            "
+          />
+        </td>
       </tr>
     </tbody>
   </v-table>
@@ -30,5 +44,5 @@ interface Student {
   cpf: string;
 }
 
-defineProps<{ students: Student[] }>();
+defineProps<{ students: Student[]; onDelete: () => Promise<void> }>();
 </script>
