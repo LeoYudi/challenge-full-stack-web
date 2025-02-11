@@ -36,7 +36,7 @@ const handleLogin = async () => {
 
     authStore.saveAuthStorage(response.data.user, response.data.token);
 
-    return router.push("/");
+    return router.push("/students");
   } catch (error) {
     if (error.status === 400)
       return snackbarStore.alertMessage("Login ou senha inválidos");
@@ -54,7 +54,7 @@ const authStore = useAuthStore();
 
 export default {
   beforeRouteEnter(_to, _from) {
-    if (authStore.isAuthenticated) return { name: "/" };
+    if (authStore.isAuthenticated) return { name: "/students" };
   },
 };
 </script>
