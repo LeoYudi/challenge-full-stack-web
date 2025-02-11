@@ -40,7 +40,8 @@ export default [
           'varsIgnorePattern': '^_',
           'caughtErrorsIgnorePattern': '^_'
         }
-      ]
+      ],
+      'vue/attribute-hyphenation': 'off'
     }
   }
 ]
