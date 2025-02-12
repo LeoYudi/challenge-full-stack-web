@@ -11,9 +11,16 @@ import { routes } from "vue-router/auto-routes";
 
 import { useAuthStore } from "@/stores/auth";
 
+const autoRoutes = setupLayouts(routes);
+
+autoRoutes.push({
+  path: "/",
+  redirect: "/students",
+});
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes),
+  routes: autoRoutes,
 });
 
 router.beforeEach(async (to, _from) => {
