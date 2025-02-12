@@ -12,6 +12,7 @@ describe('StudentController', () => {
     delete: jest.fn(),
     update: jest.fn(),
     list: jest.fn(),
+    findOne: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -185,6 +186,33 @@ describe('StudentController', () => {
             ra: 'ra 2',
           },
         ],
+      });
+    });
+  });
+
+  describe('findOne', () => {
+    it('should call StudentService.findOne and return the student data', async () => {
+      mockStudentService.findOne.mockResolvedValueOnce({
+        student: {
+          id: 'uuid 1',
+          name: 'student 1',
+          email: 'email 1',
+          cpf: 'cpf 1',
+          ra: 'ra 1',
+        },
+      });
+
+      const result = await studentController.findOne('uuid 1');
+
+      expect(mockStudentService.findOne).toHaveBeenCalledWith('uuid 1');
+      expect(result).toEqual({
+        student: {
+          id: 'uuid 1',
+          name: 'student 1',
+          email: 'email 1',
+          cpf: 'cpf 1',
+          ra: 'ra 1',
+        },
       });
     });
   });
