@@ -246,4 +246,38 @@ describe('StudentService', () => {
       expect(result).toEqual({ students: [] });
     });
   });
+
+  describe('findOne', () => {
+    it('should throw NotFoundException if student does not exists', async () => {
+      mockStudentRepository.findOne.mockResolvedValueOnce(null);
+
+      await expect(studentService.update('uuid', '', '')).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('should return student data', async () => {
+      mockStudentRepository.findOne.mockResolvedValueOnce({
+        id: 'uuid',
+        name: 'student',
+        email: 'email',
+        ra: '123',
+        cpf: '123',
+      });
+
+      const result = await studentService.findOne('uuid');
+
+      expect(mockStudentRepository.findOne).toHaveBeenCalledWith('uuid');
+
+      expect(result).toEqual({
+        student: {
+          id: 'uuid',
+          name: 'student',
+          email: 'email',
+          ra: '123',
+          cpf: '123',
+        },
+      });
+    });
+  });
 });
