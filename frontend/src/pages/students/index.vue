@@ -6,15 +6,19 @@
   </div>
 
   <div>
-    <StudentsTable :students="students" :onDelete="handleDelete" />
+    <StudentsTable
+      :students="students"
+      :onDelete="handleDelete"
+      :onEdit="handleEdit"
+    />
   </div>
 
   <ConfirmDialog
     :show="showDialog"
     title="Deletar aluno"
     text="Tem certeza que deseja deletar este aluno?"
-    :onClose="handleClose"
-    :onConfirm="handleConfirm"
+    :onClose="handleCloseDelete"
+    :onConfirm="handleConfirmDelete"
   />
 </template>
 
@@ -60,12 +64,12 @@ const handleCreate = () => {
   router.push("/students/save");
 };
 
-const handleDelete = async (id: string) => {
+const handleDelete = (id: string) => {
   selectedStudent.value = id;
   showDialog.value = true;
 };
 
-const handleConfirm = async () => {
+const handleConfirmDelete = async () => {
   try {
     await api.delete(`/student/${selectedStudent.value}`);
 
@@ -89,8 +93,12 @@ const handleConfirm = async () => {
   }
 };
 
-const handleClose = () => {
+const handleCloseDelete = () => {
   showDialog.value = false;
   selectedStudent.value = "";
+};
+
+const handleEdit = (id: string) => {
+  return router.push(`/students/save?id=${id}`);
 };
 </script>

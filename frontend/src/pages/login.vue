@@ -45,7 +45,6 @@ export default {
 
         return router.push("/students");
       } catch (error) {
-        console.log({ router, error });
         if (error instanceof AxiosError)
           if (error.status === 400)
             return snackbarStore.alertMessage("Login ou senha inválidos");
