@@ -22,12 +22,18 @@
         </v-row>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="form.ra" label="RA" :rules="[required]" />
+            <v-text-field
+              v-model="form.ra"
+              label="RA"
+              :disabled="!!query.id"
+              :rules="[required]"
+            />
           </v-col>
           <v-col cols="6">
             <v-text-field
               v-model="form.cpf"
               label="CPF"
+              :disabled="!!query.id"
               :rules="[required, cpfValidation]"
             />
           </v-col>
@@ -43,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useSnackbarStore } from "@/stores/snackbar";
 
@@ -56,6 +62,9 @@ const router = useRouter();
 const authStore = useAuthStore();
 const snackbarStore = useSnackbarStore();
 
+const route = useRoute();
+const query = route.query;
+
 const form = ref({
   name: "",
   email: "",
@@ -63,12 +72,42 @@ const form = ref({
   cpf: "",
 });
 
+watchEffect(async () => {
+  if (query.id) {
+    try {
+      const response = await api.get(`/student/${query.id}`);
+      form.value = {
+        name: response.data.student.name,
+        email: response.data.student.email,
+        ra: response.data.student.ra,
+        cpf: response.data.student.cpf,
+      };
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.status === 401) {
+          authStore.resetStorage();
+          return router.push("/login");
+        }
+
+        if (error.status === 404)
+          return snackbarStore.alertMessage("Aluno não encontrado");
+      }
+
+      snackbarStore.alertMessage("Algo deu errado, tente de novo mais tarde");
+    }
+  }
+});
+
 const submitForm = async () => {
   try {
-    const response = await api.post("/student/create", form.value);
+    let response;
+
+    if (query.id)
+      response = await api.patch(`/student/${query.id}`, form.value);
+    else response = await api.post("/student/create", form.value);
 
     snackbarStore.alertMessage(
-      `Estudante "${response.data.student.name}" matriculado`
+      `Estudante "${response.data.student.name}" salvo`
     );
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -76,6 +115,9 @@ const submitForm = async () => {
         authStore.resetStorage();
         return router.push("/login");
       }
+
+      if (error.status === 404)
+        return snackbarStore.alertMessage("Aluno não encontrado");
     }
 
     snackbarStore.alertMessage("Algo deu errado, tente de novo mais tarde");
