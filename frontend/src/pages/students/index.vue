@@ -19,6 +19,7 @@
 </template>
 
 <script lang="ts" setup>
+import { AxiosError } from "axios";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useSnackbarStore } from "@/stores/snackbar";
@@ -44,9 +45,11 @@ watchEffect(async () => {
 
     students.value = response.data.students;
   } catch (error) {
-    if (error.status === 401) {
-      authStore.resetStorage();
-      return router.push("/login");
+    if (error instanceof AxiosError) {
+      if (error.status === 401) {
+        authStore.resetStorage();
+        return router.push("/login");
+      }
     }
 
     snackbarStore.alertMessage("Algo deu errado, tente de novo mais tarde");
@@ -54,7 +57,7 @@ watchEffect(async () => {
 });
 
 const handleCreate = () => {
-  router.push("/students/create");
+  router.push("/students/save");
 };
 
 const handleDelete = async (id: string) => {
@@ -75,9 +78,11 @@ const handleConfirm = async () => {
 
     students.value = response.data.students;
   } catch (error) {
-    if (error.status === 401) {
-      authStore.resetStorage();
-      return router.push("/login");
+    if (error instanceof AxiosError) {
+      if (error.status === 401) {
+        authStore.resetStorage();
+        return router.push("/login");
+      }
     }
 
     snackbarStore.alertMessage("Algo deu errado, tente de novo mais tarde");

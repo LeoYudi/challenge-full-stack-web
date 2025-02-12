@@ -50,6 +50,7 @@ import { useSnackbarStore } from "@/stores/snackbar";
 import { required, emailValidation, cpfValidation } from "@/utils/validations";
 
 import { api } from "@/services/axios";
+import { AxiosError } from "axios";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -70,9 +71,11 @@ const submitForm = async () => {
       `Estudante "${response.data.student.name}" matriculado`
     );
   } catch (error) {
-    if (error.status === 401) {
-      authStore.resetStorage();
-      return router.push("/login");
+    if (error instanceof AxiosError) {
+      if (error.status === 401) {
+        authStore.resetStorage();
+        return router.push("/login");
+      }
     }
 
     snackbarStore.alertMessage("Algo deu errado, tente de novo mais tarde");

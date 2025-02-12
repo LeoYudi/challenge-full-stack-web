@@ -12,9 +12,10 @@
 </template>
 
 <script lang="ts" setup>
+import { AxiosError } from "axios";
 import { useRouter } from "vue-router";
 
-import { api } from "@/services/axios.ts";
+import { api } from "@/services/axios";
 
 import { useAuthStore } from "@/stores/auth";
 import { useSnackbarStore } from "@/stores/snackbar";
@@ -38,8 +39,9 @@ const handleLogin = async () => {
 
     return router.push("/students");
   } catch (error) {
-    if (error.status === 400)
-      return snackbarStore.alertMessage("Login ou senha inválidos");
+    if (error instanceof AxiosError)
+      if (error.status === 400)
+        return snackbarStore.alertMessage("Login ou senha inválidos");
 
     return snackbarStore.alertMessage(
       "Algo deu errado, tente de novo mais tarde"
@@ -49,11 +51,8 @@ const handleLogin = async () => {
 </script>
 
 <script lang="ts">
-import { useAuthStore } from "@/stores/auth";
-const authStore = useAuthStore();
-
 export default {
-  beforeRouteEnter(_to, _from) {
+  beforeRouteEnter() {
     if (authStore.isAuthenticated) return { name: "/students" };
   },
 };

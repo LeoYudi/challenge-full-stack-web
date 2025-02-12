@@ -34,8 +34,6 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from "vue";
-
 interface Student {
   id: string;
   name: string;
@@ -44,5 +42,5 @@ interface Student {
   cpf: string;
 }
 
-defineProps<{ students: Student[]; onDelete: () => Promise<void> }>();
+defineProps<{ students: Student[]; onDelete: (id: string) => Promise<void> }>();
 </script>
