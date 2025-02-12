@@ -42,4 +42,9 @@ export class StudentController {
     const { page, perPage, sortOrder, orderBy } = queryParams;
     return await this.studentService.list(+page, +perPage, sortOrder, orderBy);
   }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.studentService.findOne(id);
+  }
 }

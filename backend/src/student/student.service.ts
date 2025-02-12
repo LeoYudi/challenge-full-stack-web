@@ -78,4 +78,12 @@ export class StudentService {
 
     return { students };
   }
+
+  async findOne(id: string) {
+    const student = await this.studentRepository.findOne(id);
+
+    if (!student) throw new NotFoundException('Student not found');
+
+    return { student };
+  }
 }
