@@ -6,7 +6,7 @@
         <th class="text-left">Email</th>
         <th class="text-left">RA</th>
         <th class="text-left">CPF</th>
-        <th class="text-left">Ações</th>
+        <th class="text-center">Ações</th>
       </tr>
     </thead>
     <tbody>
@@ -15,7 +15,17 @@
         <td>{{ student.email }}</td>
         <td>{{ student.ra }}</td>
         <td>{{ student.cpf }}</td>
-        <td>
+        <td class="text-center">
+          <v-btn
+            variant="text"
+            size="small"
+            icon="mdi-pencil"
+            @click="
+              () => {
+                onEdit(student.id);
+              }
+            "
+          />
           <v-btn
             variant="text"
             size="small"
@@ -42,5 +52,9 @@ interface Student {
   cpf: string;
 }
 
-defineProps<{ students: Student[]; onDelete: (id: string) => Promise<void> }>();
+defineProps<{
+  students: Student[];
+  onDelete: (id: string) => void;
+  onEdit: (id: string) => void;
+}>();
 </script>
